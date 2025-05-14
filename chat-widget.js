@@ -68,7 +68,7 @@
 
         .n8n-chat-widget .refresh-button {
             position: absolute;
-            right: 48px; /* Đặt bên trái nút đóng */
+            right: 48px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
@@ -86,6 +86,132 @@
 
         .n8n-chat-widget .refresh-button:hover {
             opacity: 1;
+        }
+
+        .n8n-chat-widget .refresh-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .n8n-chat-widget .brand-header img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .n8n-chat-widget .brand-header span {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--chat--color-font);
+        }
+
+        .n8n-chat-widget .new-conversation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .n8n-chat-widget .welcome-text {
+            font-size: 24px;
+            font-weight: 600;
+ artifact_id="7f9b8d2a-3e2f-4b1d-9e5a-6c7f8b3e4d2b" title="chat-widget.js" contentType="text/javascript">
+(function() {
+    // Create and inject styles
+    const styles = `
+        .n8n-chat-widget {
+            --chat--color-primary: var(--n8n-chat-primary-color, #854fff);
+            --chat--color-secondary: var(--n8n-chat-secondary-color, #6b3fd4);
+            --chat--color-background: var(--n8n-chat-background-color, #ffffff);
+            --chat--color-font: var(--n8n-chat-font-color, #333333);
+            font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .n8n-chat-widget .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            width: 380px;
+            height: 600px;
+            background: var(--chat--color-background);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(133, 79, 255, 0.15);
+            border: 1px solid rgba(133, 79, 255, 0.2);
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .n8n-chat-widget .chat-container.position-left {
+            right: auto;
+            left: 20px;
+        }
+
+        .n8n-chat-widget .chat-container.open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .n8n-chat-widget .brand-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(133, 79, 255, 0.1);
+            position: relative;
+        }
+
+        .n8n-chat-widget .close-button {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--chat--color-font);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+            font-size: 20px;
+            opacity: 0.6;
+        }
+
+        .n8n-chat-widget .close-button:hover {
+            opacity: 1;
+        }
+
+        .n8n-chat-widget .refresh-button {
+            position: absolute;
+            right: 48px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--chat--color-font);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+            font-size: 20px;
+            opacity: 0.6;
+        }
+
+        .n8n-chat-widget .refresh-button:hover {
+            opacity: 1;
+        }
+
+        .n8n-chat-widget .refresh-button svg {
+            width: 20px;
+            height: 20px;
         }
 
         .n8n-chat-widget .brand-header img {
@@ -381,8 +507,8 @@
                 <img src="${config.branding.logo}" alt="${config.branding.name}">
                 <span>${config.branding.name}</span>
                 <button class="refresh-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M17.65 6.35A7.95 7.95 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                     </svg>
                 </button>
                 <button class="close-button">×</button>
@@ -457,13 +583,6 @@
         }
     }
 
-    async function refreshConversation() {
-        // Xóa tất cả tin nhắn
-        messagesContainer.innerHTML = '';
-        // Bắt đầu cuộc trò chuyện mới
-        await startNewConversation();
-    }
-
     async function sendMessage(message) {
         const messageData = {
             action: "sendMessage",
@@ -502,6 +621,17 @@
         }
     }
 
+    function resetConversation() {
+        // Clear all messages
+        messagesContainer.innerHTML = '';
+        // Hide chat interface and show new conversation screen
+        chatInterface.classList.remove('active');
+        chatContainer.querySelector('.brand-header').style.display = 'flex';
+        chatContainer.querySelector('.new-conversation').style.display = 'block';
+        // Clear textarea
+        textarea.value = '';
+    }
+
     newChatBtn.addEventListener('click', startNewConversation);
     
     sendButton.addEventListener('click', () => {
@@ -536,5 +666,7 @@
     });
 
     // Add refresh button handler
-    refreshButton.addEventListener('click', refreshConversation);
+    refreshButton.addEventListener('click', () => {
+        resetConversation();
+    });
 })();
